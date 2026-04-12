@@ -1,0 +1,33 @@
+{
+	"name": "DS_HTTP_TLC_Parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_HTTP_TLC",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"taxi_type": {
+				"type": "string"
+			},
+			"year": {
+				"type": "string"
+			},
+			"month": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "@concat(dataset().taxi_type, '_tripdata_',dataset().year, '-', dataset().month, '.parquet')",
+					"type": "Expression"
+				}
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}
