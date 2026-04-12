@@ -1,0 +1,325 @@
+{
+	"name": "PL_Ingest_TLC_2025",
+	"properties": {
+		"description": "Ingests all the NYC TLC 2025 trip data from TLC website into ADLS Gen2",
+		"activities": [
+			{
+				"name": "ForEach_Files",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@variables('files')",
+						"type": "Expression"
+					},
+					"batchCount": 8,
+					"activities": [
+						{
+							"name": "Copy_TLC_Parquet",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ParquetSource",
+									"storeSettings": {
+										"type": "HttpReadSettings",
+										"requestMethod": "GET"
+									},
+									"formatSettings": {
+										"type": "ParquetReadSettings"
+									}
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings",
+										"copyBehavior": "PreserveHierarchy"
+									},
+									"formatSettings": {
+										"type": "ParquetWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"enableSkipIncompatibleRow": true,
+								"logSettings": {
+									"enableCopyActivityLog": true,
+									"copyActivityLogSettings": {
+										"logLevel": "Warning",
+										"enableReliableLogging": false
+									},
+									"logLocationSettings": {
+										"linkedServiceName": {
+											"referenceName": "LS_ADLS_NYC_TLC",
+											"type": "LinkedServiceReference"
+										}
+									}
+								},
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_HTTP_TLC_Parquet",
+									"type": "DatasetReference",
+									"parameters": {
+										"taxi_type": {
+											"value": "@item().taxi_type",
+											"type": "Expression"
+										},
+										"year": {
+											"value": "@variables('year')",
+											"type": "Expression"
+										},
+										"month": {
+											"value": "@item().month",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_ADLS_TLC_Parquet",
+									"type": "DatasetReference",
+									"parameters": {
+										"taxi_type": {
+											"value": "@item().taxi_type",
+											"type": "Expression"
+										},
+										"year": {
+											"value": "@variables('year')",
+											"type": "Expression"
+										},
+										"month": {
+											"value": "@item().month",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"year": {
+				"type": "String",
+				"defaultValue": "2025"
+			},
+			"files": {
+				"type": "Array",
+				"defaultValue": [
+					{
+						"taxi_type": "yellow",
+						"month": "01"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "02"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "03"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "04"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "05"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "06"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "07"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "08"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "09"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "10"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "11"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "12"
+					},
+					{
+						"taxi_type": "green",
+						"month": "01"
+					},
+					{
+						"taxi_type": "green",
+						"month": "02"
+					},
+					{
+						"taxi_type": "green",
+						"month": "03"
+					},
+					{
+						"taxi_type": "green",
+						"month": "04"
+					},
+					{
+						"taxi_type": "green",
+						"month": "05"
+					},
+					{
+						"taxi_type": "green",
+						"month": "06"
+					},
+					{
+						"taxi_type": "green",
+						"month": "07"
+					},
+					{
+						"taxi_type": "green",
+						"month": "08"
+					},
+					{
+						"taxi_type": "green",
+						"month": "09"
+					},
+					{
+						"taxi_type": "green",
+						"month": "10"
+					},
+					{
+						"taxi_type": "green",
+						"month": "11"
+					},
+					{
+						"taxi_type": "green",
+						"month": "12"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "01"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "02"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "03"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "04"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "05"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "06"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "07"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "08"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "09"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "10"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "11"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "12"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "01"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "02"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "03"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "04"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "05"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "06"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "07"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "08"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "09"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "10"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "11"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "12"
+					}
+				]
+			}
+		},
+		"annotations": []
+	}
+}
