@@ -48,7 +48,7 @@
 										"type": "ParquetWriteSettings"
 									}
 								},
-								"enableStaging": false,
+								"enableStaging": true,
 								"enableSkipIncompatibleRow": true,
 								"logSettings": {
 									"enableCopyActivityLog": true,
