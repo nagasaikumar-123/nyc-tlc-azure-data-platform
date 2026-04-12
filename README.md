@@ -33,7 +33,7 @@ Source: [NYC TLC Trip Record Data](https://www.nyc.gov/site/tlc/about/tlc-trip-r
 
 ## Project Structure
 
-\`\`\`
+```
 nyc-tlc-azure-data-platform/
 ├── adf/                  # Azure Data Factory pipelines, datasets, linked services
 ├── notebooks/            # Databricks transformation notebooks (Project 2)
@@ -41,8 +41,7 @@ nyc-tlc-azure-data-platform/
 ├── streaming/            # Stream Analytics queries (Project 4)
 ├── quality/              # Great Expectations configs and checkpoints (Project 5)
 └── docs/                 # Architecture diagrams and documentation
-\`\`\`
-
+```
 ## Setup Instructions
 
 ### Prerequisites
