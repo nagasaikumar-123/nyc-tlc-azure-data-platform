@@ -1,0 +1,9 @@
+{
+	"name": "adf-nyc-tlc",
+	"location": "southindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "85fd2723-aef1-49b4-ae79-60becb969b40",
+		"tenantId": "7070221e-896d-43fe-86e7-057f3552dc28"
+	}
+}
