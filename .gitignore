@@ -1,0 +1,33 @@
+# Azure credentials
+*.env
+local.settings.json
+*connection_string*
+*access_key*
+**/*secrets*
+**/*credentials*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+.venv/
+env/
+
+# Databricks
+.databricks/
+*.dbc
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# Azure Data Factory (auto-generated)
+adf/arm-template-parameters-definition.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
