@@ -1,0 +1,36 @@
+{
+	"name": "DS_ADLS_TLC_Binary",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_NYC_TLC",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"taxi_type": {
+				"type": "string"
+			},
+			"year": {
+				"type": "string"
+			},
+			"month": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@concat(dataset().taxi_type, '_tripdata_', dataset().year, '-', dataset().month, '.parquet')",
+					"type": "Expression"
+				},
+				"folderPath": {
+					"value": "@concat('raw/', dataset().taxi_type, '/year=', dataset().year, '/month=', dataset().month)",
+					"type": "Expression"
+				},
+				"fileSystem": "nyc-tlc"
+			}
+		}
+	}
+}

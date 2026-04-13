@@ -1,0 +1,138 @@
+{
+	"name": "PL_Ingest_TLC_2025",
+	"properties": {
+		"description": "Ingests all the NYC TLC 2025 trip data from TLC website into ADLS Gen2",
+		"activities": [
+			{
+				"name": "ForEach_Files",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@variables('files')",
+						"type": "Expression"
+					},
+					"batchCount": 8,
+					"activities": [
+						{
+							"name": "Copy_TLC_Parquet",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "BinarySource",
+									"storeSettings": {
+										"type": "HttpReadSettings",
+										"requestMethod": "GET"
+									},
+									"formatSettings": {
+										"type": "BinaryReadSettings"
+									}
+								},
+								"sink": {
+									"type": "BinarySink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings",
+										"copyBehavior": "PreserveHierarchy"
+									}
+								},
+								"enableStaging": false,
+								"enableSkipIncompatibleRow": true,
+								"logSettings": {
+									"enableCopyActivityLog": true,
+									"copyActivityLogSettings": {
+										"logLevel": "Warning",
+										"enableReliableLogging": false
+									},
+									"logLocationSettings": {
+										"linkedServiceName": {
+											"referenceName": "LS_ADLS_NYC_TLC",
+											"type": "LinkedServiceReference"
+										}
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_HTTP_TLC_Binary",
+									"type": "DatasetReference",
+									"parameters": {
+										"taxi_type": {
+											"value": "@item().taxi_type",
+											"type": "Expression"
+										},
+										"year": {
+											"value": "@variables('year')",
+											"type": "Expression"
+										},
+										"month": {
+											"value": "@variables('month')",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_ADLS_TLC_Binary",
+									"type": "DatasetReference",
+									"parameters": {
+										"taxi_type": {
+											"value": "@item().taxi_type",
+											"type": "Expression"
+										},
+										"year": {
+											"value": "@variables('year')",
+											"type": "Expression"
+										},
+										"month": {
+											"value": "@variables('month')",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"variables": {
+			"year": {
+				"type": "String",
+				"defaultValue": "@formatDateTime(addMonths(utcNow(), -2), 'yyyy')"
+			},
+			"files": {
+				"type": "Array",
+				"defaultValue": [
+					{
+						"taxi_type": "yellow"
+					},
+					{
+						"taxi_type": "green"
+					},
+					{
+						"taxi_type": "fhv"
+					},
+					{
+						"taxi_type": "fhvhv"
+					}
+				]
+			},
+			"month": {
+				"type": "String",
+				"defaultValue": "@formatDateTime(addMonths(utcNow(), -2), 'MM')"
+			}
+		},
+		"annotations": []
+	}
+}
