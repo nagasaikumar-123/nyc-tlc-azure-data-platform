@@ -75,21 +75,7 @@
 							"inputs": [
 								{
 									"referenceName": "DS_HTTP_TLC_Parquet",
-									"type": "DatasetReference",
-									"parameters": {
-										"taxi_type": {
-											"value": "@item().taxi_type",
-											"type": "Expression"
-										},
-										"year": {
-											"value": "@variables('year')",
-											"type": "Expression"
-										},
-										"month": {
-											"value": "@item().month",
-											"type": "Expression"
-										}
-									}
+									"type": "DatasetReference"
 								}
 							],
 							"outputs": [
