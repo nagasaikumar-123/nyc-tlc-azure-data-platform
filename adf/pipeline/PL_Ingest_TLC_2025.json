@@ -29,23 +29,20 @@
 							"userProperties": [],
 							"typeProperties": {
 								"source": {
-									"type": "ParquetSource",
+									"type": "BinarySource",
 									"storeSettings": {
 										"type": "HttpReadSettings",
 										"requestMethod": "GET"
 									},
 									"formatSettings": {
-										"type": "ParquetReadSettings"
+										"type": "BinaryReadSettings"
 									}
 								},
 								"sink": {
-									"type": "ParquetSink",
+									"type": "BinarySink",
 									"storeSettings": {
 										"type": "AzureBlobFSWriteSettings",
 										"copyBehavior": "PreserveHierarchy"
-									},
-									"formatSettings": {
-										"type": "ParquetWriteSettings"
 									}
 								},
 								"enableStaging": false,
@@ -62,19 +59,11 @@
 											"type": "LinkedServiceReference"
 										}
 									}
-								},
-								"translator": {
-									"type": "TabularTranslator",
-									"typeConversion": true,
-									"typeConversionSettings": {
-										"allowDataTruncation": true,
-										"treatBooleanAsNumber": false
-									}
 								}
 							},
 							"inputs": [
 								{
-									"referenceName": "DS_HTTP_TLC_Parquet",
+									"referenceName": "DS_HTTP_TLC_Binary",
 									"type": "DatasetReference",
 									"parameters": {
 										"taxi_type": {
@@ -94,7 +83,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "DS_ADLS_TLC_Parquet",
+									"referenceName": "DS_ADLS_TLC_Binary",
 									"type": "DatasetReference",
 									"parameters": {
 										"taxi_type": {
