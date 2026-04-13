@@ -13,6 +13,12 @@
 		},
 		"LS_KeyVault_NYC_TLC_properties_typeProperties_baseUrl": {
 			"value": "https://kv-nyc-tlc.vault.azure.net/"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
 		}
 	}
 }

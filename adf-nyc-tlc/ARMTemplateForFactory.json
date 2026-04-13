@@ -6,10 +6,418 @@
 			"type": "string",
 			"metadata": "Data Factory name",
 			"defaultValue": "adf-nyc-tlc"
+		},
+		"LS_ADLS_NYC_TLC_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://nycrawdatazone.dfs.core.windows.net/"
+		},
+		"LS_HTTP_TLC_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://d37ci6vzurychx.cloudfront.net/trip-data/"
+		},
+		"LS_KeyVault_NYC_TLC_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://kv-nyc-tlc.vault.azure.net/"
 		}
 	},
 	"variables": {
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
-	"resources": []
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Ingest_TLC_2025')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Ingests all the NYC TLC 2025 trip data from TLC website into ADLS Gen2",
+				"activities": [
+					{
+						"name": "ForEach_Files",
+						"type": "ForEach",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@variables('files')",
+								"type": "Expression"
+							},
+							"batchCount": 8,
+							"activities": [
+								{
+									"name": "Copy_TLC_Parquet",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "BinarySource",
+											"storeSettings": {
+												"type": "HttpReadSettings",
+												"requestMethod": "GET"
+											},
+											"formatSettings": {
+												"type": "BinaryReadSettings"
+											}
+										},
+										"sink": {
+											"type": "BinarySink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings",
+												"copyBehavior": "PreserveHierarchy"
+											}
+										},
+										"enableStaging": false,
+										"enableSkipIncompatibleRow": true,
+										"logSettings": {
+											"enableCopyActivityLog": true,
+											"copyActivityLogSettings": {
+												"logLevel": "Warning",
+												"enableReliableLogging": false
+											},
+											"logLocationSettings": {
+												"linkedServiceName": {
+													"referenceName": "LS_ADLS_NYC_TLC",
+													"type": "LinkedServiceReference"
+												}
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_HTTP_TLC_Binary",
+											"type": "DatasetReference",
+											"parameters": {
+												"taxi_type": {
+													"value": "@item().taxi_type",
+													"type": "Expression"
+												},
+												"year": {
+													"value": "@variables('year')",
+													"type": "Expression"
+												},
+												"month": {
+													"value": "@variables('month')",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_ADLS_TLC_Binary",
+											"type": "DatasetReference",
+											"parameters": {
+												"taxi_type": {
+													"value": "@item().taxi_type",
+													"type": "Expression"
+												},
+												"year": {
+													"value": "@variables('year')",
+													"type": "Expression"
+												},
+												"month": {
+													"value": "@variables('month')",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"variables": {
+					"year": {
+						"type": "String",
+						"defaultValue": "@formatDateTime(addMonths(utcNow(), -2), 'yyyy')"
+					},
+					"files": {
+						"type": "Array",
+						"defaultValue": [
+							{
+								"taxi_type": "yellow"
+							},
+							{
+								"taxi_type": "green"
+							},
+							{
+								"taxi_type": "fhv"
+							},
+							{
+								"taxi_type": "fhvhv"
+							}
+						]
+					},
+					"month": {
+						"type": "String",
+						"defaultValue": "@formatDateTime(addMonths(utcNow(), -2), 'MM')"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_HTTP_TLC_Binary')]",
+				"[concat(variables('factoryId'), '/datasets/DS_ADLS_TLC_Binary')]",
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_NYC_TLC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_ADLS_TLC_Binary')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_NYC_TLC",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"taxi_type": {
+						"type": "string"
+					},
+					"year": {
+						"type": "string"
+					},
+					"month": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat(dataset().taxi_type, '_tripdata_', dataset().year, '-', dataset().month, '.parquet')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat('raw/', dataset().taxi_type, '/year=', dataset().year, '/month=', dataset().month)",
+							"type": "Expression"
+						},
+						"fileSystem": "nyc-tlc"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_NYC_TLC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_ADLS_TLC_Parquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ADLS_NYC_TLC",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"taxi_type": {
+						"type": "string"
+					},
+					"year": {
+						"type": "string"
+					},
+					"month": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@concat(dataset().taxi_type, '_tripdata_', dataset().year,'-',dataset().month,'.parquet')",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@concat('raw/',dataset().taxi_type,'/year=',dataset().year, \n'/month=', dataset().month)",
+							"type": "Expression"
+						},
+						"fileSystem": "nyc-tlc"
+					},
+					"compressionCodec": "none"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_NYC_TLC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_HTTP_TLC_Binary')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_HTTP_TLC",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"taxi_type": {
+						"type": "string"
+					},
+					"year": {
+						"type": "string"
+					},
+					"month": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "HttpServerLocation",
+						"relativeUrl": {
+							"value": "@concat(dataset().taxi_type, '_tripdata_', dataset().year, '-', dataset().month, '.parquet')",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_HTTP_TLC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DS_HTTP_TLC_Parquet')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_HTTP_TLC",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"taxi_type": {
+						"type": "string"
+					},
+					"year": {
+						"type": "string"
+					},
+					"month": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "HttpServerLocation",
+						"relativeUrl": {
+							"value": "@concat(dataset().taxi_type, '_tripdata_',dataset().year, '-', dataset().month, '.parquet')",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_HTTP_TLC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_ADLS_NYC_TLC')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "ADLS Gen2 storage for NYC TLC data lake",
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('LS_ADLS_NYC_TLC_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "LS_KeyVault_NYC_TLC",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "adls-storageaccount-key"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_KeyVault_NYC_TLC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_HTTP_TLC')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "NYC TLC source data HTTP Endpoint",
+				"annotations": [],
+				"type": "HttpServer",
+				"typeProperties": {
+					"url": "[parameters('LS_HTTP_TLC_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Anonymous"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_KeyVault_NYC_TLC')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"description": "Key vault for NYC TLC project",
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('LS_KeyVault_NYC_TLC_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/NYC_TLC_Data Trigger')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "PL_Ingest_TLC_2025",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Month",
+						"interval": 1,
+						"startTime": "2026-04-13T18:16:00",
+						"timeZone": "India Standard Time",
+						"schedule": {
+							"monthDays": [
+								15
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/PL_Ingest_TLC_2025')]"
+			]
+		}
+	]
 }
