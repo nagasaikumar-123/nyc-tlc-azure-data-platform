@@ -1,0 +1,19 @@
+{
+	"name": "DS_ADLS_TLC_Lookup",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_NYC_TLC",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "taxi_zone_lookup.csv",
+				"folderPath": "lookup",
+				"fileSystem": "nyc-tlc"
+			}
+		}
+	}
+}
