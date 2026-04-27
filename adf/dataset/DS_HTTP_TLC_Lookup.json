@@ -1,0 +1,17 @@
+{
+	"name": "DS_HTTP_TLC_Lookup",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_HTTP_TLC_Misc",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": "taxi_zone_lookup.csv"
+			}
+		}
+	}
+}
