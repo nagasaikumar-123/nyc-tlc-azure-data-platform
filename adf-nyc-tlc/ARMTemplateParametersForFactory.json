@@ -11,6 +11,9 @@
 		"LS_HTTP_TLC_properties_typeProperties_url": {
 			"value": "https://d37ci6vzurychx.cloudfront.net/trip-data/"
 		},
+		"LS_HTTP_TLC_Misc_properties_typeProperties_url": {
+			"value": "https://d37ci6vzurychx.cloudfront.net/misc/"
+		},
 		"LS_KeyVault_NYC_TLC_properties_typeProperties_baseUrl": {
 			"value": "https://kv-nyc-tlc.vault.azure.net/"
 		}
