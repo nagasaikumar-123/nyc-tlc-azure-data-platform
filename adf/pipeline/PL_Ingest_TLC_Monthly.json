@@ -1,5 +1,5 @@
 {
-	"name": "PL_Ingest_TLC_2025",
+	"name": "PL_Ingest_TLC_Monthly",
 	"properties": {
 		"description": "Ingests all the NYC TLC 2025 trip data from TLC website into ADLS Gen2",
 		"activities": [
