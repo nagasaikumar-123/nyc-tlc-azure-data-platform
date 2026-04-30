@@ -29,7 +29,395 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/PL_Ingest_TLC_2025')]",
+			"name": "[concat(parameters('factoryName'), '/PL_Ingest_TLC_For_Random_Year')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "ForEach",
+						"type": "ForEach",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@variables('files')",
+								"type": "Expression"
+							},
+							"batchCount": 8,
+							"activities": [
+								{
+									"name": "Copy data",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "BinarySource",
+											"storeSettings": {
+												"type": "HttpReadSettings",
+												"requestMethod": "GET"
+											},
+											"formatSettings": {
+												"type": "BinaryReadSettings"
+											}
+										},
+										"sink": {
+											"type": "BinarySink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings",
+												"copyBehavior": "PreserveHierarchy"
+											}
+										},
+										"enableStaging": false,
+										"logSettings": {
+											"enableCopyActivityLog": true,
+											"copyActivityLogSettings": {
+												"logLevel": "Warning",
+												"enableReliableLogging": false
+											},
+											"logLocationSettings": {
+												"linkedServiceName": {
+													"referenceName": "LS_ADLS_NYC_TLC",
+													"type": "LinkedServiceReference"
+												},
+												"path": ""
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_HTTP_TLC_Binary",
+											"type": "DatasetReference",
+											"parameters": {
+												"taxi_type": {
+													"value": "@item().taxi_type",
+													"type": "Expression"
+												},
+												"year": {
+													"value": "@pipeline().parameters.year",
+													"type": "Expression"
+												},
+												"month": {
+													"value": "@item().month",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_ADLS_TLC_Binary",
+											"type": "DatasetReference",
+											"parameters": {
+												"taxi_type": {
+													"value": "@item().taxi_type",
+													"type": "Expression"
+												},
+												"year": {
+													"value": "@pipeline().parameters.year",
+													"type": "Expression"
+												},
+												"month": {
+													"value": "@item().month",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"year": {
+						"type": "string"
+					}
+				},
+				"variables": {
+					"files": {
+						"type": "Array",
+						"defaultValue": [
+							{
+								"taxi_type": "yellow",
+								"month": "01"
+							},
+							{
+								"taxi_type": "yellow",
+								"month": "02"
+							},
+							{
+								"taxi_type": "yellow",
+								"month": "03"
+							},
+							{
+								"taxi_type": "yellow",
+								"month": "04"
+							},
+							{
+								"taxi_type": "yellow",
+								"month": "05"
+							},
+							{
+								"taxi_type": "yellow",
+								"month": "06"
+							},
+							{
+								"taxi_type": "yellow",
+								"month": "07"
+							},
+							{
+								"taxi_type": "yellow",
+								"month": "08"
+							},
+							{
+								"taxi_type": "yellow",
+								"month": "09"
+							},
+							{
+								"taxi_type": "yellow",
+								"month": "10"
+							},
+							{
+								"taxi_type": "yellow",
+								"month": "11"
+							},
+							{
+								"taxi_type": "yellow",
+								"month": "12"
+							},
+							{
+								"taxi_type": "green",
+								"month": "01"
+							},
+							{
+								"taxi_type": "green",
+								"month": "02"
+							},
+							{
+								"taxi_type": "green",
+								"month": "03"
+							},
+							{
+								"taxi_type": "green",
+								"month": "04"
+							},
+							{
+								"taxi_type": "green",
+								"month": "05"
+							},
+							{
+								"taxi_type": "green",
+								"month": "06"
+							},
+							{
+								"taxi_type": "green",
+								"month": "07"
+							},
+							{
+								"taxi_type": "green",
+								"month": "08"
+							},
+							{
+								"taxi_type": "green",
+								"month": "09"
+							},
+							{
+								"taxi_type": "green",
+								"month": "10"
+							},
+							{
+								"taxi_type": "green",
+								"month": "11"
+							},
+							{
+								"taxi_type": "green",
+								"month": "12"
+							},
+							{
+								"taxi_type": "fhv",
+								"month": "01"
+							},
+							{
+								"taxi_type": "fhv",
+								"month": "02"
+							},
+							{
+								"taxi_type": "fhv",
+								"month": "03"
+							},
+							{
+								"taxi_type": "fhv",
+								"month": "04"
+							},
+							{
+								"taxi_type": "fhv",
+								"month": "05"
+							},
+							{
+								"taxi_type": "fhv",
+								"month": "06"
+							},
+							{
+								"taxi_type": "fhv",
+								"month": "07"
+							},
+							{
+								"taxi_type": "fhv",
+								"month": "08"
+							},
+							{
+								"taxi_type": "fhv",
+								"month": "09"
+							},
+							{
+								"taxi_type": "fhv",
+								"month": "10"
+							},
+							{
+								"taxi_type": "fhv",
+								"month": "11"
+							},
+							{
+								"taxi_type": "fhv",
+								"month": "12"
+							},
+							{
+								"taxi_type": "fhvhv",
+								"month": "01"
+							},
+							{
+								"taxi_type": "fhvhv",
+								"month": "02"
+							},
+							{
+								"taxi_type": "fhvhv",
+								"month": "03"
+							},
+							{
+								"taxi_type": "fhvhv",
+								"month": "04"
+							},
+							{
+								"taxi_type": "fhvhv",
+								"month": "05"
+							},
+							{
+								"taxi_type": "fhvhv",
+								"month": "06"
+							},
+							{
+								"taxi_type": "fhvhv",
+								"month": "07"
+							},
+							{
+								"taxi_type": "fhvhv",
+								"month": "08"
+							},
+							{
+								"taxi_type": "fhvhv",
+								"month": "09"
+							},
+							{
+								"taxi_type": "fhvhv",
+								"month": "10"
+							},
+							{
+								"taxi_type": "fhvhv",
+								"month": "11"
+							},
+							{
+								"taxi_type": "fhvhv",
+								"month": "12"
+							}
+						]
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_HTTP_TLC_Binary')]",
+				"[concat(variables('factoryId'), '/datasets/DS_ADLS_TLC_Binary')]",
+				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_NYC_TLC')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Ingest_TLC_Lookup')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy_TaxiZone_Lookup",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "BinarySource",
+								"storeSettings": {
+									"type": "HttpReadSettings",
+									"requestMethod": "GET"
+								},
+								"formatSettings": {
+									"type": "BinaryReadSettings"
+								}
+							},
+							"sink": {
+								"type": "BinarySink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "PreserveHierarchy"
+								}
+							},
+							"enableStaging": false
+						},
+						"inputs": [
+							{
+								"referenceName": "DS_HTTP_TLC_Lookup",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DS_ADLS_TLC_Lookup",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_HTTP_TLC_Lookup')]",
+				"[concat(variables('factoryId'), '/datasets/DS_ADLS_TLC_Lookup')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Ingest_TLC_Monthly')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -174,70 +562,6 @@
 				"[concat(variables('factoryId'), '/datasets/DS_HTTP_TLC_Binary')]",
 				"[concat(variables('factoryId'), '/datasets/DS_ADLS_TLC_Binary')]",
 				"[concat(variables('factoryId'), '/linkedServices/LS_ADLS_NYC_TLC')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/PL_Ingest_TLC_Lookup')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Copy_TaxiZone_Lookup",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "BinarySource",
-								"storeSettings": {
-									"type": "HttpReadSettings",
-									"requestMethod": "GET"
-								},
-								"formatSettings": {
-									"type": "BinaryReadSettings"
-								}
-							},
-							"sink": {
-								"type": "BinarySink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings",
-									"copyBehavior": "PreserveHierarchy"
-								}
-							},
-							"enableStaging": false
-						},
-						"inputs": [
-							{
-								"referenceName": "DS_HTTP_TLC_Lookup",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "DS_ADLS_TLC_Lookup",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_HTTP_TLC_Lookup')]",
-				"[concat(variables('factoryId'), '/datasets/DS_ADLS_TLC_Lookup')]"
 			]
 		},
 		{
@@ -523,7 +847,7 @@
 				"pipelines": [
 					{
 						"pipelineReference": {
-							"referenceName": "PL_Ingest_TLC_2025",
+							"referenceName": "PL_Ingest_TLC_Monthly",
 							"type": "PipelineReference"
 						},
 						"parameters": {}
@@ -545,7 +869,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/PL_Ingest_TLC_2025')]"
+				"[concat(variables('factoryId'), '/pipelines/PL_Ingest_TLC_Monthly')]"
 			]
 		}
 	]
