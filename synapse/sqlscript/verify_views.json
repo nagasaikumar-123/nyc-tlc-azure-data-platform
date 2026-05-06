@@ -1,0 +1,17 @@
+{
+	"name": "verify_views",
+	"properties": {
+		"content": {
+			"query": "SELECT 'monthly_revenue' AS view_name, COUNT(*) AS row_count \nFROM vw_monthly_revenue\n\nUNION ALL\n\nSELECT 'cbd_impact', COUNT(*) \nFROM vw_cbd_impact\n\nUNION ALL\n\nSELECT 'zone_demand', COUNT(*) \nFROM vw_zone_demand\n\nUNION ALL\n\nSELECT 'hourly_patterns', COUNT(*) \nFROM vw_hourly_patterns\n\nUNION ALL\n\nSELECT 'dropoff_demand', COUNT(*) \nFROM vw_dropoff_demand",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "nyc_tlc_db",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
