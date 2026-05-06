@@ -1,0 +1,17 @@
+{
+	"name": "SQL script",
+	"properties": {
+		"content": {
+			"query": "CREATE MASTER KEY ENCRYPTION BY PASSWORD = 'Sai34105@12345';\n\nCREATE EXTERNAL DATA SOURCE nyc_tlc_storage\nWITH (\n    LOCATION = 'abfss://nyc-tlc@nycrawdatazone.dfs.core.windows.net'\n);",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "nyc_tlc_db",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
