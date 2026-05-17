@@ -1,0 +1,15 @@
+{
+	"name": "df-nyc-tlc",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "southindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "0baf1e27-a7d3-4483-8a99-f951001defe7",
+		"tenantId": "ffe7cdf1-48aa-47be-bde6-464639ed43ef"
+	}
+}
