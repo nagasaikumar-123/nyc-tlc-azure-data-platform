@@ -1,12 +1,12 @@
 {
 	"name": "LS_KeyVault_NYC_TLC",
-	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"description": "Key vault for NYC TLC project",
 		"annotations": [],
 		"type": "AzureKeyVault",
 		"typeProperties": {
-			"baseUrl": "https://kv-nyc-tlc.vault.azure.net/"
+			"baseUrl": "https://keyvault-nyc-tlc.vault.azure.net/"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
 }
