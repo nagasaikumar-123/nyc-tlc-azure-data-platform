@@ -113,10 +113,200 @@
 		"variables": {
 			"files": {
 				"type": "Array",
-				"defaultValue": {
-					"taxi_type": "yellow",
-					"month": "01"
-				}
+				"defaultValue": [
+					{
+						"taxi_type": "yellow",
+						"month": "01"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "02"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "03"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "04"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "05"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "06"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "07"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "08"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "09"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "10"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "11"
+					},
+					{
+						"taxi_type": "yellow",
+						"month": "12"
+					},
+					{
+						"taxi_type": "green",
+						"month": "01"
+					},
+					{
+						"taxi_type": "green",
+						"month": "02"
+					},
+					{
+						"taxi_type": "green",
+						"month": "03"
+					},
+					{
+						"taxi_type": "green",
+						"month": "04"
+					},
+					{
+						"taxi_type": "green",
+						"month": "05"
+					},
+					{
+						"taxi_type": "green",
+						"month": "06"
+					},
+					{
+						"taxi_type": "green",
+						"month": "07"
+					},
+					{
+						"taxi_type": "green",
+						"month": "08"
+					},
+					{
+						"taxi_type": "green",
+						"month": "09"
+					},
+					{
+						"taxi_type": "green",
+						"month": "10"
+					},
+					{
+						"taxi_type": "green",
+						"month": "11"
+					},
+					{
+						"taxi_type": "green",
+						"month": "12"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "01"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "02"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "03"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "04"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "05"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "06"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "07"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "08"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "09"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "10"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "11"
+					},
+					{
+						"taxi_type": "fhv",
+						"month": "12"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "01"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "02"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "03"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "04"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "05"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "06"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "07"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "08"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "09"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "10"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "11"
+					},
+					{
+						"taxi_type": "fhvhv",
+						"month": "12"
+					}
+				]
 			}
 		},
 		"annotations": []
